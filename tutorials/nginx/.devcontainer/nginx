@@ -1,6 +1,6 @@
 # base image nginx:alpine
 FROM docker.io/nginx:alpine@sha256:4550bf745cc1cdb9bbf415dbef60b33ff5a6cd218e907c0863fcfaeaa6e00ad4
 
+# COPY <src> (where we are getting files/folders to copy) <dest> (where we want to put files)
 # COPY static-html-directory /app
 
-# EXPOSE 5000
