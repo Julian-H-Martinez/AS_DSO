@@ -1,0 +1,11 @@
+- name: Deploy a web application
+# options on listing hosts
+# option1: list each individual server
+  hosts: db_and_web_server1, db_and_web_server2
+# option2: wildcard (*)
+  # hosts: db_and_web_server*
+# option3: group servers
+  # hosts: db_and_web_servers
+  tasks:
+    - name: Ping
+      ping:
