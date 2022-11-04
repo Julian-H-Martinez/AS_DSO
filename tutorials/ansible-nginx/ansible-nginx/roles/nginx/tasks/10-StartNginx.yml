@@ -1,0 +1,6 @@
+---
+
+-
+# starting nginx once installed
+  name: Start Nginx 
+  shell: nginx
