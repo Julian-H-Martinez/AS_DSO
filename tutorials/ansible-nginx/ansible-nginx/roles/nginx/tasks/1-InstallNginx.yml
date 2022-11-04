@@ -1,0 +1,9 @@
+---
+
+# task to install nginx
+
+- 
+  name: Install Nginx
+  yum:
+    name: nginx
+    state: latest
