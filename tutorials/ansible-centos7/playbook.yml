@@ -1,0 +1,80 @@
+---
+
+- name: Deploy web applicaton
+  hosts: db_and_web_servers
+  # hosts: db_and_web_server1
+  tasks:
+  # # Testing connection
+  #   - name: Trying Ping
+  #     ping: 
+# Install Python and Dependencies
+  - name: Install Python and it's Dependencies
+    yum:
+      name: '{{ item }}'
+      state: installed
+    with_items:
+      - epel-release
+      - python3
+      - python3-pip
+# Install MySQL community repository
+  - name: Install MySQL repo
+    yum: 
+      name: "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm"
+      state: present
+# # Install and Configure Database
+#   - name: Install MySQL Database
+#     yum:
+#       name: 'mysql-server'
+#       state: present     
+# Install and Configure Database
+  - name: Install MySQL Database
+    yum:
+      name: '{{ item }}'
+      state: present
+    with_items:
+      - 'mysql-server'
+      - 'mysql-devel'
+
+# BELOW IS SRC CODE FROM TUTORIAL
+# NEED TO ADD COMMENTS ON EACH TASK
+  - name: create MySQL configuration file
+    copy:
+      content: |
+        [client]
+        user=root
+        password="@targ8et"
+      dest: "/etc/.my.cnf"
+
+  - name: Start MySQL Service
+    service:
+      name: mysqld
+      state: started
+      enabled: yes
+
+  - name: Install mysql-python package
+    yum:
+      name: MySQL-python
+      state: present
+
+  - name: Install required Python libraries
+    shell: pip3 install flask flask-mysql
+      
+  - name: Create Application Database
+    mysql_db:
+      name: employee_db
+      state: present
+
+  - name: Create Database user
+    mysql_user:
+      name: db_user
+      password: Passw0rd
+      priv: '*.*:ALL'
+      state: present
+
+  - name: Copy source code
+    copy:
+      src: app.py
+      dest: /opt/app.py
+
+  - name: Start web server
+    shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
